@@ -74,7 +74,14 @@ public class Trybank
     // 3. Construa a funcionalidade de fazer Logout
     public void Logout()
     {
-        throw new NotImplementedException();
+        switch (Logged)
+        {
+            case true:
+                Logged = false;
+                break;
+            default:
+                throw new AccessViolationException("Usuário não está logado");
+        };
     }
 
     // 4. Construa a funcionalidade de checar o saldo
