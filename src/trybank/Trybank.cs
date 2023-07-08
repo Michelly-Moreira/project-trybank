@@ -23,9 +23,9 @@ public class Trybank
     // 1. Construa a funcionalidade de cadastrar novas contas
     public void RegisterAccount(int number, int agency, int pass)
     {
-        for (int index = 0; index < 50; index++ )
+        for (int register = 0; register < maxAccounts; register++ )
         {
-            if((number == Bank[index,0]) && (agency == Bank[index,1]))
+            if((number == Bank[register,0]) && (agency == Bank[register,1]))
                 throw new ArgumentException("A conta já está sendo usada!");
         }
         Bank[registeredAccounts,0] = number;
@@ -39,7 +39,36 @@ public class Trybank
     // 2. Construa a funcionalidade de fazer Login
     public void Login(int number, int agency, int pass)
     {
-        throw new NotImplementedException();
+        if (!Logged)
+        {
+    for (int register = 0; register < registeredAccounts; register++ )
+    {
+        if((number != Bank[register,0]) || (agency != Bank[register,1]))
+        {
+            throw new ArgumentException("Agência + Conta não encontrada");
+        }
+        else
+        {
+            if((number == Bank[register,0]) && (agency == Bank[register,1]) && (pass == Bank[register,2]))
+            {
+                Logged = true;
+            }
+            else
+            {
+                if((number == Bank[register,0]) && (agency == Bank[register,1]) && (pass != Bank[register,2]))
+                {
+                    throw new ArgumentException("Senha incorreta");
+                }
+
+            }
+        }
+    } 
+        }
+        else
+        {
+            Logged = true;
+            throw new AccessViolationException("Usuário já está logado");
+        }
     }
 
     // 3. Construa a funcionalidade de fazer Logout
