@@ -23,9 +23,9 @@ public class Trybank
     // 1. Construa a funcionalidade de cadastrar novas contas
     public void RegisterAccount(int number, int agency, int pass)
     {
-        for (int register = 0; register < maxAccounts; register++ )
+        for (int index = 0; index < maxAccounts; index++ )
         {
-            if((number == Bank[register,0]) && (agency == Bank[register,1]))
+            if((number == Bank[index, 0]) && (agency == Bank[index, 1]))
                 throw new ArgumentException("A conta já está sendo usada!");
         }
         Bank[registeredAccounts,0] = number;
@@ -41,21 +41,22 @@ public class Trybank
     {
         if (!Logged)
         {
-    for (int register = 0; register < registeredAccounts; register++ )
+    for (int index = 0; index < registeredAccounts; index++ )
     {
-        if((number != Bank[register,0]) || (agency != Bank[register,1]))
+        if((number != Bank[index,0]) || (agency != Bank[index,1]))
         {
             throw new ArgumentException("Agência + Conta não encontrada");
         }
         else
         {
-            if((number == Bank[register,0]) && (agency == Bank[register,1]) && (pass == Bank[register,2]))
+            if((number == Bank[index, 0]) && (agency == Bank[index, 1]) && (pass == Bank[index, 2]))
             {
                 Logged = true;
+                loggedUser = index;
             }
             else
             {
-                if((number == Bank[register,0]) && (agency == Bank[register,1]) && (pass != Bank[register,2]))
+                if((number == Bank[index,0]) && (agency == Bank[index,1]) && (pass != Bank[index,2]))
                 {
                     throw new ArgumentException("Senha incorreta");
                 }
@@ -87,11 +88,11 @@ public class Trybank
     // 4. Construa a funcionalidade de checar o saldo
     public int CheckBalance()
     {
-        if (Logged)
+        try
         {
-            return Bank[registeredAccounts,3];
+            return Bank[loggedUser,3];
         }
-        else
+        catch
         {
             throw new AccessViolationException("Usuário não está logado");
         }   
@@ -102,7 +103,7 @@ public class Trybank
     {
         try
         {
-            // (Bank[loggedUser,3] + value);
+            Bank[loggedUser, 3] += value;
         }
         catch
         {
