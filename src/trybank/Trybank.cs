@@ -41,29 +41,29 @@ public class Trybank
     {
         if (!Logged)
         {
-    for (int index = 0; index < registeredAccounts; index++ )
-    {
-        if((number != Bank[index,0]) || (agency != Bank[index,1]))
-        {
-            throw new ArgumentException("Agência + Conta não encontrada");
-        }
-        else
-        {
-            if((number == Bank[index, 0]) && (agency == Bank[index, 1]) && (pass == Bank[index, 2]))
+            for (int index = 0; index < registeredAccounts; index++ )
             {
-                Logged = true;
-                loggedUser = index;
-            }
-            else
-            {
-                if((number == Bank[index,0]) && (agency == Bank[index,1]) && (pass != Bank[index,2]))
+                if((number != Bank[index,0]) || (agency != Bank[index,1]))
                 {
-                    throw new ArgumentException("Senha incorreta");
+                    throw new ArgumentException("Agência + Conta não encontrada");
                 }
+                else
+                {
+                    if((number == Bank[index, 0]) && (agency == Bank[index, 1]) && (pass == Bank[index, 2]))
+                    {
+                        Logged = true;
+                        loggedUser = index;
+                    }
+                    else
+                    {
+                        if((number == Bank[index,0]) && (agency == Bank[index,1]) && (pass != Bank[index,2]))
+                        {
+                            throw new ArgumentException("Senha incorreta");
+                        }
 
-            }
-        }
-    } 
+                    }
+                }
+            } 
         }
         else
         {
@@ -134,8 +134,28 @@ public class Trybank
     // 7. Construa a funcionalidade de transferir dinheiro entre contas
     public void Transfer(int destinationNumber, int destinationAgency, int value)
     {
-        throw new NotImplementedException();
+        if (!Logged)
+        {
+            throw new AccessViolationException("Usuário não está logado");
+        }
+        else
+        {
+            if (Bank[loggedUser, 3] < value)
+            {
+                throw new InvalidOperationException("Saldo insuficiente");
+            }
+            else
+            {
+                for (int index = 0; index < registeredAccounts; index++ )
+                {
+                    Console.WriteLine(index);
+                    if ((Bank[index, 0] == destinationNumber) && (Bank[index, 1] == destinationAgency))
+                    {
+                        Bank[loggedUser, 3] -= value;
+                        Bank[index, 3] += value;
+                    }
+                }
+            }      
+        }
     }
-
-   
 }
